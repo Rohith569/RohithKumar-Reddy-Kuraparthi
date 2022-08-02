@@ -1,0 +1,78 @@
+import pandas as pd
+raw_df= pd.read_csv("main/survey.csv")
+
+pd.set_option("display.max_columns", 40)
+pd.set_option("display.max_rows", 40)
+
+main_data = raw_df[["Age", "Gender", "Country", "family_history", "treatment"
+                    ,"mental_health_consequence", "phys_health_consequence"
+                     , "remote_work", "tech_company"]]
+
+print(main_data)
+#Correction of mental and physical consequence column
+main_data.loc[(main_data['mental_health_consequence']).isin(['Yes', 'Maybe']),"mental_health_consequence"] = "Yes"
+main_data.loc[(main_data['phys_health_consequence'].isin(['Yes', 'Maybe'])),"phys_health_consequence"] = "Yes"
+
+# Correction of Country column
+main_data.loc[(main_data['Country']).isin(['United States' ,'Canada', 'Mexico' ]),"Country"] = "North_America"
+
+main_data.loc[(main_data['Country']).isin(['United Kingdom' ,'Bulgaria' ,'France' ,'Portugal',
+                         'Netherlands' ,'Switzerland' ,'Poland', 'Germany']),"Country"] = "Europe"
+
+main_data.loc[(main_data['Country']).isin(['Philippines' ,'Thailand' ,'China' ,'Croatia',
+                         'Japan' ,'Nigeria' ,'India', 'Bahamas','Finland', 'Singapore']),"Country"] = "Asia"
+main_data.loc[(main_data['Country']).isin(['Australia' ,'Russia', 'Brazil', 'Slovenia',
+                        'Costa Rica' ,'Austria' ,'Ireland', 'New Zealand' ]),"Country"] = "Islands"
+main_data.loc[(main_data['Country']).isin(['South Africa' ,'Italy' ,'Sweden',
+                        'Colombia', 'Latvia' ,'Romania' ,'Belgium' ,'Zimbabwe', 'Spain' ,'Uruguay',
+                        'Israel', 'Bosnia and Herzegovina', 'Hungary' ,'Norway' ,'Denmark',
+                        'Bahamas, The' ,'Greece', 'Moldova' ,'Georgia' ,'Czech Republic']),"Country"] = "Africa"
+
+# Correction of gender column
+main_data.loc[(main_data['Gender'].isin(['Female','female', 'F','f', 'Femake',
+                        'Woman','woman','Female ' ,'cis-female/femme',  'Female (cis)','Cis Female',
+                         'femail','p' ])),"Gender"] = "Female"
+main_data.loc[(main_data['Gender'].isin(['M', 'Male' ,'male','m' ,'Male-ish', 'maile', 'Cis Male',
+                        'Mal','Male (CIS)', 'Make','male leaning androgynous' ,'Male ',
+                        'Man', 'msle',  'Mail', 'cis male', 'Malr', 'Cis Man',
+                        'Cis Man','ostensibly male'])),"Gender"] = "Male"
+main_data.loc[(main_data['Gender'].isin(['Trans-female','something kinda male?','queer/she/they' ,'Nah',
+                        'non-binary' ,'All' ,'Enby', 'fluid', 'Genderqueer', 'Androgyne', 'Agender','queer',
+                        'Guy (-ish) ^_^', 'Trans woman','Neuter',  'Female (trans)', 'queer',
+                       'A little about you', 'ostensibly male, unsure what that really means'])),"Gender"] = "Non-Binary"
+
+#print(main_data['Gender'].unique())
+#print(main_data['phys_health_consequence'].unique())
+
+main_data.groupby('Country')
+
+print(main_data)
+
+
+
+['United States' 'Canada' 'United Kingdom' 'Bulgaria' 'France' 'Portugal'
+ 'Netherlands' 'Switzerland' 'Poland' 'Australia' 'Germany' 'Russia'
+ 'Mexico' 'Brazil' 'Slovenia' 'Costa Rica' 'Austria' 'Ireland' 'India'
+ 'South Africa' 'Italy' 'Sweden' 'Colombia' 'Latvia' 'Romania' 'Belgium'
+ 'New Zealand' 'Zimbabwe' 'Spain' 'Finland' 'Uruguay' 'Israel'
+ 'Bosnia and Herzegovina' 'Hungary' 'Singapore' 'Japan' 'Nigeria'
+ 'Croatia' 'Norway' 'Thailand' 'Denmark' 'Bahamas, The' 'Greece' 'Moldova'
+ 'Georgia' 'China' 'Czech Republic' 'Philippines']
+
+# Index(['Timestamp', 'Age', 'Gender', 'Country', 'state', 'self_employed',
+      # 'family_history', 'treatment', 'work_interfere', 'no_employees',
+     #  'remote_work', 'tech_company', 'benefits', 'care_options',
+      # 'wellness_program', 'seek_help', 'anonymity', 'leave',
+       #'mental_health_consequence', 'phys_health_consequence', 'coworkers',
+      # 'supervisor', 'mental_health_interview', 'phys_health_interview',
+       #'mental_vs_physical', 'obs_consequence', 'comments'],
+      #dtype='object')
+
+#['Female' 'M' 'Male' 'male' 'female' 'm' 'Male-ish' 'maile' 'Trans-female'
+ #'Cis Female' 'F' 'something kinda male?' 'Cis Male' 'Woman' 'f' 'Mal'
+ #'Male (CIS)' 'queer/she/they' 'non-binary' 'Femake' 'woman' 'Make' 'Nah'
+ #'All' 'Enby' 'fluid' 'Genderqueer' 'Female ' 'Androgyne' 'Agender'
+ #'cis-female/femme' 'Guy (-ish) ^_^' 'male leaning androgynous' 'Male '
+ #'Man' 'Trans woman' 'msle' 'Neuter' 'Female (trans)' 'queer'
+ #'Female (cis)' 'Mail' 'cis male' 'A little about you' 'Malr' 'p' 'femail'
+ #'Cis Man' 'ostensibly male, unsure what that really means']      
