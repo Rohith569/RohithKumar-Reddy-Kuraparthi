@@ -1,4 +1,12 @@
+from tkinter import Y
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from dash import Dash, html, dcc
+import plotly.express as px
+
+
 raw_df= pd.read_csv("main/survey.csv")
 
 pd.set_option("display.max_columns", 40)
@@ -48,6 +56,24 @@ main_data.groupby('Country')
 
 print(main_data)
 
+fig = px.bar(main_data, x = "Gender", y = "mental_health_consequence", color ="Country", barmode = "group" )
+app = Dash(__name__)
+
+app.layout = html.Div(children=[
+    html.H1(children='Hello Dash'),
+
+    html.Div(children = '''
+    Dash: A web application frame work for your data.'''),
+
+     dcc.Graph(id = 'example-graph',
+        figure = fig),
+
+
+])
+
+if __name__ == '__main__':
+    app.run_server(debug= True)
+
 
 
 ['United States' 'Canada' 'United Kingdom' 'Bulgaria' 'France' 'Portugal'
@@ -75,4 +101,5 @@ print(main_data)
  #'cis-female/femme' 'Guy (-ish) ^_^' 'male leaning androgynous' 'Male '
  #'Man' 'Trans woman' 'msle' 'Neuter' 'Female (trans)' 'queer'
  #'Female (cis)' 'Mail' 'cis male' 'A little about you' 'Malr' 'p' 'femail'
- #'Cis Man' 'ostensibly male, unsure what that really means']      
+ #'Cis Man' 'ostensibly male, unsure what that really means']    
+
